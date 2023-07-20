@@ -5,23 +5,24 @@ const should = chai.should();
 const Pet = require('../models/pet');
 
 const fido =     {
-    "name": "Norman",
-    "species": "Greyhound",
-    "birthday": "2008-11-11",
-    "favoriteFood": "Liver",
-    "picUrl": "http://www.gpamass.com/s/img/emotionheader713297504.jpg",
-    "picUrlSq": "https://www.collinsdictionary.com/images/thumb/greyhound_21701074_250.jpg",
-    "description": "Fido is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"
+  "name": "Norman",
+  "species": "Greyhound",
+  "birthday": "2008-11-11",
+  "favoriteFood": "Liver",
+  "picUrl": "http://www.gpamass.com/s/img/emotionheader713297504.jpg",
+  "picUrlSq": "https://www.collinsdictionary.com/images/thumb/greyhound_21701074_250.jpg",
+  "avatarUrl": "https://www.collinsdictionary.com/images/thumb/greyhound_21701074_250.jpg",
+  "description": "Fido is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food",
+  "price": 9.99,
 }
 
 chai.use(chaiHttp);
 
-describe('Pets', ()  => {
-
+describe('Pets', () => {
   after(() => {
-    Pet.deleteMany({$or: [{name: 'Norman'}, {name: 'Spider'}] }).exec((err, pets) => {
-      console.log(pets, `Deleted ${pets.n} documents`)
-    })
+    Pet.deleteMany({ name: { $in: ['Norman', 'Spider'] } }).exec((err, result) => {
+      console.log(`Deleted ${result.deletedCount} documents`);
+    });
   });
 
   // TEST INDEX
@@ -49,71 +50,94 @@ describe('Pets', ()  => {
   // TEST CREATE
   it('should create a SINGLE pet on /pets POST', (done) => {
     chai.request(server)
-        .post('/pets')
-        .send(fido)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.should.be.html
-          done();
-        });
+      .post('/pets')
+      .send(fido)
+      .set('Content-Type', 'application/json')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        done();
+      });
   });
 
   // TEST SHOW
   it('should show a SINGLE pet on /pets/<id> GET', (done) => {
     var pet = new Pet(fido);
-     pet.save((err, data) => {
-       chai.request(server)
-         .get(`/pets/${data._id}`)
-         .end((err, res) => {
-           res.should.have.status(200);
-           res.should.be.html
-           done();
-         });
-     });
+    pet.save((err, data) => {
+      if (err) {
+        console.error('Error saving pet:', err);
+        done(err);
+        return;
+      }
 
+      chai.request(server)
+        .get(`/pets/${data._id}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.html;
+          done();
+        });
+    });
   });
 
   // TEST EDIT
   it('should edit a SINGLE pet on /pets/<id>/edit GET', (done) => {
     var pet = new Pet(fido);
-     pet.save((err, data) => {
-       chai.request(server)
-         .get(`/pets/${data._id}/edit`)
-         .end((err, res) => {
-           res.should.have.status(200);
-           res.should.be.html
-           done();
-         });
-     });
-  });
+    pet.save((err, data) => {
+      if (err) {
+        console.error('Error saving pet:', err);
+        done(err);
+        return;
+      }
 
+      chai.request(server)
+        .get(`/pets/${data._id}/edit`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.html;
+          done();
+        });
+    });
+  });
 
   // TEST UPDATE
   it('should update a SINGLE pet on /pets/<id> PUT', (done) => {
     var pet = new Pet(fido);
-    pet.save((err, data)  => {
-     chai.request(server)
-      .put(`/pets/${data._id}?_method=PUT`)
-      .send({'name': 'Spider'})
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.should.be.html
-        done();
-      });
+    pet.save((err, data) => {
+      if (err) {
+        console.error('Error saving pet:', err);
+        done(err);
+        return;
+      }
+
+      chai.request(server)
+        .put(`/pets/${data._id}`)
+        .send({ 'name': 'Spider' })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.html;
+          done();
+        });
     });
   });
 
   // TEST DELETE
   it('should delete a SINGLE pet on /pets/<id> DELETE', (done) => {
     var pet = new Pet(fido);
-    pet.save((err, data)  => {
-     chai.request(server)
-      .delete(`/pets/${data._id}?_method=DELETE`)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.should.be.html
-        done();
-      });
+    pet.save((err, data) => {
+      if (err) {
+        console.error('Error saving pet:', err);
+        done(err);
+        return;
+      }
+
+      chai.request(server)
+        .delete(`/pets/${data._id}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.should.be.html;
+          done();
+        });
     });
   });
 
