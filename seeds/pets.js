@@ -7,7 +7,7 @@ module.exports = [
         "picUrl": "http://www.dogbreedslist.info/uploads/allimg/dog-pictures/Rottweiler-3.jpg",
         "price": 9.99,
         "picUrlSq": "http://www.dogbreedplus.com/dog_breeds/images/cute-rottweiler-puppy.jpg",
-        "description": "Rex is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"
+        "description": "Rex is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food",
     },
     {
         "name": "Fido",
@@ -17,7 +17,7 @@ module.exports = [
         "picUrl": "http://www.gpamass.com/s/img/emotionheader713297504.jpg",
         "price": 9.99,
         "picUrlSq": "https://www.collinsdictionary.com/images/thumb/greyhound_21701074_250.jpg",
-        "description": "Fido is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"
+        "description": "Fido is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food",
     },
     {
         "name": "Rolfe",
@@ -27,7 +27,7 @@ module.exports = [
         "picUrl": "https://www.pocketpitbull.com/wp-content/uploads/2017/03/blue-staffy-pitbull-370x208.jpg",
         "price": 9.99,
         "picUrlSq": "http://www.vrcpitbull.com/wp-content/uploads/2011/02/VAMPVAMP%E2%80%A2.jpg",
-        "description": "Rolfe is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"
+        "description": "Rolfe is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food",
     },
     {
         "name": "Princhi",
@@ -36,7 +36,8 @@ module.exports = [
         "favoriteFood": "Fish",
         "picUrl": "http://www.dogbreedslist.info/uploads/allimg/dog-pictures/West-Highland-White-Terrier-2.jpg",
         "picUrlSq": "https://upload.wikimedia.org/wikipedia/commons/2/2c/West_Highland_White_Terrier_Krakow.jpg",
-        "description": "Princhi is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food"
+        "description": "Princhi is a dog and he's a good dog who loves to play and hang out with his owners. He also likes to nap and enjoys eating dog food",
+        "price": 10
     },
     {
         "name": "Mr. Fluffles",
