@@ -59,17 +59,42 @@ module.exports = (app) => {
 
   // SEARCH PET
   app.get('/search', (req, res) => {
-    const term = new RegExp(req.query.term, 'i')
-    const page = req.query.page || 1
+    const term = req.query.term;
+    const page = req.query.page || 1;
+
     Pet.paginate(
+      { $text: { $search: term } },
       {
-        $or: [
-          { 'name': term },
-          { 'species': term }
-        ]
-      },
-      { page: page }).then((results) => {
-        res.render('pets-index', { pets: results.docs, pagesCount: results.pages, currentPage: page, term: req.query.term });
-      });
+        page: page,
+        limit: 20,
+        sort: { score: { $meta: "textScore" } },
+        score: { $meta: "textScore" }
+      }
+    ).then((results) => {
+      if (results.docs && results.docs.length) {
+        // If results are found using text search
+        if (req.header('Content-Type') == 'application/json') {
+          return res.json({ pets: results.docs, pagesCount: results.pages, currentPage: page });
+        } else {
+          return res.render('pets-index', { pets: results.docs, pagesCount: results.pages, currentPage: page, term: term });
+        }
+      } else {
+        // Fallback to the regex search method if no results are found using text search
+        const regexTerm = new RegExp(term, 'i');
+        Pet.paginate(
+          {
+            $or: [
+              { 'name': regexTerm },
+              { 'species': regexTerm }
+            ]
+          },
+          { page: page, limit: 20 }
+        ).then((regexResults) => {
+          res.render('pets-index', { pets: regexResults.docs, pagesCount: regexResults.pages, currentPage: page, term: term });
+        });
+      }
+    }).catch((err) => {
+      return res.status(400).send(err);
+    });
   });
 }
